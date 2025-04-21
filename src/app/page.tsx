@@ -1,103 +1,205 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import Hero from "@/components/sections/Hero";
+import CallToAction from "@/components/sections/CallToAction";
+import Testimonial from "@/components/sections/Testimonial";
+import FeatureCard from "@/components/sections/FeatureCard";
+import ContactForm from "@/components/sections/ContactForm";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Stato per Hero
+  const [heroData, setHeroData] = useState({
+    title: "Crea la tua landing pubblicitaria",
+    subtitle: "Usa PromoKit per progettare e testare campagne visuali in pochi minuti.",
+    imageUrl: "https://source.unsplash.com/featured/?marketing",
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Stato per Testimonial
+  const [testimonialData, setTestimonialData] = useState({
+    name: "Jane Doe",
+    role: "Marketing Specialist",
+    quote: "PromoKit ha cambiato il nostro approccio alla pubblicità online, rendendolo più veloce ed efficiente.",
+    imageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
+  });
+
+  // Lista di immagini di sfondo per Hero
+  const backgroundImages = [
+    "https://source.unsplash.com/1600x900/?marketing",
+    "https://source.unsplash.com/1600x900/?business",
+    "https://source.unsplash.com/1600x900/?technology",
+    "https://source.unsplash.com/1600x900/?startup",
+    "https://source.unsplash.com/1600x900/?design",
+  ];
+
+  // Funzione per caricare i dati da localStorage
+  useEffect(() => {
+    const storedHeroData = localStorage.getItem("heroData");
+    const storedTestimonialData = localStorage.getItem("testimonialData");
+
+    if (storedHeroData) {
+      setHeroData(JSON.parse(storedHeroData));
+    }
+    if (storedTestimonialData) {
+      setTestimonialData(JSON.parse(storedTestimonialData));
+    }
+
+    // Cambiare l'immagine di sfondo periodicamente
+    let currentImageIndex = 0;
+    const intervalId = setInterval(() => {
+      currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+      setHeroData((prevData) => ({
+        ...prevData,
+        imageUrl: backgroundImages[currentImageIndex],
+      }));
+    }, 5000); // Cambia immagine ogni 5 secondi
+
+    // Pulizia dell'intervallo quando il componente viene smontato
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Funzione per salvare i dati in localStorage
+  useEffect(() => {
+    localStorage.setItem("heroData", JSON.stringify(heroData));
+    localStorage.setItem("testimonialData", JSON.stringify(testimonialData));
+  }, [heroData, testimonialData]);
+
+  // Gestire il cambiamento dei dati del Hero
+  const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHeroData({
+      ...heroData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Gestire il cambiamento dei dati del Testimonial
+  const handleTestimonialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTestimonialData({
+      ...testimonialData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Funzione per resettare i dati a quelli predefiniti
+  const resetHeroData = () => {
+    setHeroData({
+      title: "Crea la tua landing pubblicitaria",
+      subtitle: "Usa PromoKit per progettare e testare campagne visuali in pochi minuti.",
+      imageUrl: "https://source.unsplash.com/featured/?technology",
+    });
+    localStorage.setItem("heroData", JSON.stringify(heroData));
+  };
+
+  const resetTestimonialData = () => {
+    setTestimonialData({
+      name: "Jane Doe",
+      role: "Marketing Specialist",
+      quote: "PromoKit ha cambiato il nostro approccio alla pubblicità online, rendendolo più veloce ed efficiente.",
+      imageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
+    });
+    localStorage.setItem("testimonialData", JSON.stringify(testimonialData));
+  };
+
+  return (
+    <main>
+      {/* Hero Section con sfondo dinamico */}
+      <Hero
+        title={heroData.title}
+        subtitle={heroData.subtitle}
+        imageUrl={heroData.imageUrl}
+      />
+
+      {/* Controlli per modificare Hero */}
+      <div className="p-8">
+        <h2 className="text-xl font-semibold mb-4">Modifica Hero</h2>
+        <div className="mb-4">
+          <label className="block text-sm">Titolo</label>
+          <input
+            type="text"
+            name="title"
+            value={heroData.title}
+            onChange={handleHeroChange}
+            className="p-2 border border-gray-300 rounded w-full"
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div className="mb-4">
+          <label className="block text-sm">Sottotitolo</label>
+          <input
+            type="text"
+            name="subtitle"
+            value={heroData.subtitle}
+            onChange={handleHeroChange}
+            className="p-2 border border-gray-300 rounded w-full"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm">URL Immagine</label>
+          <input
+            type="text"
+            name="imageUrl"
+            value={heroData.imageUrl}
+            onChange={handleHeroChange}
+            className="p-2 border border-gray-300 rounded w-full"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </div>
+
+        {/* Pulsante per resettare i dati Hero */}
+        <button
+          onClick={resetHeroData}
+          className="bg-red-600 text-white py-2 px-4 rounded mt-4"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          Reset Hero
+        </button>
+      </div>
+
+      <hr className="border-t border-gray-200 my-8" />
+
+      {/* Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
+        <FeatureCard
+          title="Facile da usare"
+          description="Strumenti intuitivi per progettare landing page in pochi click."
+          icon="https://img.icons8.com/ios/452/brush.png"
+        />
+        <FeatureCard
+          title="Design personalizzabile"
+          description="Crea design unici adattabili a qualsiasi tipo di campagna."
+          icon="https://img.icons8.com/ios/452/edit.png"
+        />
+        <FeatureCard
+          title="Test A/B"
+          description="Analizza facilmente la efficacia delle tue campagne con test A/B."
+          icon="https://img.icons8.com/ios/452/poll.png"
+        />
+      </div>
+
+      <hr className="border-t border-gray-200 my-8" />
+
+      {/* Testimonial Section */}
+      <Testimonial
+        initialName={testimonialData.name}
+        initialRole={testimonialData.role}
+        initialQuote={testimonialData.quote}
+        initialImageUrl={testimonialData.imageUrl}
+      />
+
+      {/* Pulsante per resettare i dati Testimonial */}
+      <button
+        onClick={resetTestimonialData}
+        className="bg-red-600 text-white py-2 px-4 rounded mt-4"
+      >
+        Reset Testimonial
+      </button>
+
+      <hr className="border-t border-gray-200 my-8" />
+
+      <ContactForm />
+
+      <CallToAction
+        text="Hai già un'idea? Inizia a costruire ora!"
+        buttonText="Crea una sezione"
+        onClick={() => alert("Work in progress 😎")}
+      />
+    </main>
   );
 }
