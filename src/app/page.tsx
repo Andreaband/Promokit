@@ -6,24 +6,45 @@ import CallToAction from "@/components/sections/CallToAction";
 import Testimonial from "@/components/sections/Testimonial";
 import FeatureCard from "@/components/sections/FeatureCard";
 import ContactForm from "@/components/sections/ContactForm";
+import FAQSection from "@/components/sections/FAQSection";
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
-  // Stato per Hero
-  const [heroData, setHeroData] = useState({
+  const initialHeroData = {
     title: "Crea la tua landing pubblicitaria",
     subtitle: "Usa PromoKit per progettare e testare campagne visuali in pochi minuti.",
     imageUrl: "https://source.unsplash.com/featured/?marketing",
-  });
+  };
 
-  // Stato per Testimonial
-  const [testimonialData, setTestimonialData] = useState({
+  const initialTestimonialData = {
     name: "Jane Doe",
     role: "Marketing Specialist",
     quote: "PromoKit ha cambiato il nostro approccio alla pubblicità online, rendendolo più veloce ed efficiente.",
     imageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
-  });
+  };
 
-  // Lista di immagini di sfondo per Hero
+  const initialFeatures = [
+    {
+      title: "Facile da usare",
+      description: "Strumenti intuitivi per progettare landing page in pochi click.",
+      icon: "https://img.icons8.com/ios/452/brush.png",
+    },
+    {
+      title: "Design personalizzabile",
+      description: "Crea design unici adattabili a qualsiasi tipo di campagna.",
+      icon: "https://img.icons8.com/ios/452/edit.png",
+    },
+    {
+      title: "Test A/B",
+      description: "Analizza facilmente la efficacia delle tue campagne con test A/B.",
+      icon: "https://img.icons8.com/ios/452/poll.png",
+    },
+  ];
+
+  const [heroData, setHeroData] = useState(initialHeroData);
+  const [testimonialData, setTestimonialData] = useState(initialTestimonialData);
+  const [features, setFeatures] = useState(initialFeatures);
+
   const backgroundImages = [
     "https://source.unsplash.com/1600x900/?marketing",
     "https://source.unsplash.com/1600x900/?business",
@@ -32,169 +53,149 @@ export default function Home() {
     "https://source.unsplash.com/1600x900/?design",
   ];
 
-  // Funzione per caricare i dati da localStorage
   useEffect(() => {
     const storedHeroData = localStorage.getItem("heroData");
     const storedTestimonialData = localStorage.getItem("testimonialData");
+    const storedFeatures = localStorage.getItem("features");
 
-    if (storedHeroData) {
-      setHeroData(JSON.parse(storedHeroData));
-    }
-    if (storedTestimonialData) {
-      setTestimonialData(JSON.parse(storedTestimonialData));
-    }
+    if (storedHeroData) setHeroData(JSON.parse(storedHeroData));
+    if (storedTestimonialData) setTestimonialData(JSON.parse(storedTestimonialData));
+    if (storedFeatures) setFeatures(JSON.parse(storedFeatures));
 
-    // Cambiare l'immagine di sfondo periodicamente
     let currentImageIndex = 0;
     const intervalId = setInterval(() => {
       currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-      setHeroData((prevData) => ({
-        ...prevData,
+      setHeroData((prev) => ({
+        ...prev,
         imageUrl: backgroundImages[currentImageIndex],
       }));
-    }, 5000); // Cambia immagine ogni 5 secondi
+    }, 5000);
 
-    // Pulizia dell'intervallo quando il componente viene smontato
     return () => clearInterval(intervalId);
   }, []);
 
-  // Funzione per salvare i dati in localStorage
   useEffect(() => {
     localStorage.setItem("heroData", JSON.stringify(heroData));
     localStorage.setItem("testimonialData", JSON.stringify(testimonialData));
-  }, [heroData, testimonialData]);
+    localStorage.setItem("features", JSON.stringify(features));
+  }, [heroData, testimonialData, features]);
 
-  // Gestire il cambiamento dei dati del Hero
   const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHeroData({
-      ...heroData,
-      [e.target.name]: e.target.value,
-    });
+    setHeroData({ ...heroData, [e.target.name]: e.target.value });
   };
 
-  // Gestire il cambiamento dei dati del Testimonial
-  const handleTestimonialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTestimonialData({
-      ...testimonialData,
-      [e.target.name]: e.target.value,
-    });
+  const handleFeatureChange = (index: number, field: 'title' | 'description' | 'icon', value: string) => {
+  const updatedFeatures = [...features];
+  updatedFeatures[index] = {
+    ...updatedFeatures[index],
+    [field]: value,
   };
+  setFeatures(updatedFeatures);
+};
 
-  // Funzione per resettare i dati a quelli predefiniti
-  const resetHeroData = () => {
-    setHeroData({
-      title: "Crea la tua landing pubblicitaria",
-      subtitle: "Usa PromoKit per progettare e testare campagne visuali in pochi minuti.",
-      imageUrl: "https://source.unsplash.com/featured/?technology",
-    });
-    localStorage.setItem("heroData", JSON.stringify(heroData));
+  const handleReset = () => {
+    setHeroData(initialHeroData);
+    setTestimonialData(initialTestimonialData);
+    setFeatures(initialFeatures);
+    localStorage.removeItem("heroData");
+    localStorage.removeItem("testimonialData");
+    localStorage.removeItem("features");
   };
 
   const resetTestimonialData = () => {
-    setTestimonialData({
-      name: "Jane Doe",
-      role: "Marketing Specialist",
-      quote: "PromoKit ha cambiato il nostro approccio alla pubblicità online, rendendolo più veloce ed efficiente.",
-      imageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
-    });
-    localStorage.setItem("testimonialData", JSON.stringify(testimonialData));
+    setTestimonialData(initialTestimonialData);
+    localStorage.setItem("testimonialData", JSON.stringify(initialTestimonialData));
+  };
+
+  const resetFeatures = () => {
+    setFeatures(initialFeatures);
+    localStorage.setItem("features", JSON.stringify(initialFeatures));
   };
 
   return (
-    <main>
-      {/* Hero Section con sfondo dinamico */}
-      <Hero
-        title={heroData.title}
-        subtitle={heroData.subtitle}
-        imageUrl={heroData.imageUrl}
-      />
+    <main className="md:ml-48">
+      <Sidebar />
 
-      {/* Controlli per modificare Hero */}
+      {/* Hero Section */}
+      <section id="hero">
+        <Hero {...heroData} />
+      </section>
+
+      {/* Hero Editor */}
       <div className="p-8">
         <h2 className="text-xl font-semibold mb-4">Modifica Hero</h2>
-        <div className="mb-4">
-          <label className="block text-sm">Titolo</label>
-          <input
-            type="text"
-            name="title"
-            value={heroData.title}
-            onChange={handleHeroChange}
-            className="p-2 border border-gray-300 rounded w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm">Sottotitolo</label>
-          <input
-            type="text"
-            name="subtitle"
-            value={heroData.subtitle}
-            onChange={handleHeroChange}
-            className="p-2 border border-gray-300 rounded w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm">URL Immagine</label>
-          <input
-            type="text"
-            name="imageUrl"
-            value={heroData.imageUrl}
-            onChange={handleHeroChange}
-            className="p-2 border border-gray-300 rounded w-full"
-          />
-        </div>
-
-        {/* Pulsante per resettare i dati Hero */}
-        <button
-          onClick={resetHeroData}
-          className="bg-red-600 text-white py-2 px-4 rounded mt-4"
-        >
-          Reset Hero
+        {["title", "subtitle", "imageUrl"].map((field) => (
+          <div key={field} className="mb-4">
+            <label className="block text-sm capitalize">{field}</label>
+            <input
+              type="text"
+              name={field}
+              value={heroData[field as keyof typeof heroData]}
+              onChange={handleHeroChange}
+              className="p-2 border border-gray-300 rounded w-full"
+            />
+          </div>
+        ))}
+        <button onClick={handleReset} className="bg-red-600 text-white py-2 px-4 rounded mt-4">
+          Resetta tutto
         </button>
       </div>
 
-      <hr className="border-t border-gray-200 my-8" />
+      {/* Features Editor */}
+      <section id="features" className="p-8">
+        <h2 className="text-xl font-semibold mb-4">Modifica Features</h2>
+        {features.map((feature, index) => (
+          <div key={index} className="mb-6 border p-4 rounded">
+            {(["title", "description", "icon"] as const).map((field) => (
+  <div key={field} className="mb-2">
+    <label className="block text-sm capitalize">{field}</label>
+    <input
+      type="text"
+      value={feature[field]}
+      onChange={(e) => handleFeatureChange(index, field, e.target.value)}
+      className="p-2 border border-gray-300 rounded w-full"
+    />
+  </div>
+))}
+
+          </div>
+        ))}
+        <button onClick={resetFeatures} className="bg-red-600 text-white py-2 px-4 rounded mt-4">
+          Reset Features
+        </button>
+      </section>
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
-        <FeatureCard
-          title="Facile da usare"
-          description="Strumenti intuitivi per progettare landing page in pochi click."
-          icon="https://img.icons8.com/ios/452/brush.png"
-        />
-        <FeatureCard
-          title="Design personalizzabile"
-          description="Crea design unici adattabili a qualsiasi tipo di campagna."
-          icon="https://img.icons8.com/ios/452/edit.png"
-        />
-        <FeatureCard
-          title="Test A/B"
-          description="Analizza facilmente la efficacia delle tue campagne con test A/B."
-          icon="https://img.icons8.com/ios/452/poll.png"
-        />
+        {features.map((feature, index) => (
+          <FeatureCard key={index} {...feature} />
+        ))}
       </div>
 
-      <hr className="border-t border-gray-200 my-8" />
-
       {/* Testimonial Section */}
-      <Testimonial
-        initialName={testimonialData.name}
-        initialRole={testimonialData.role}
-        initialQuote={testimonialData.quote}
-        initialImageUrl={testimonialData.imageUrl}
-      />
+      <section id="testimonial" className="p-8">
+        <Testimonial
+  initialName={testimonialData.name}
+  initialRole={testimonialData.role}
+  initialQuote={testimonialData.quote}
+  initialImageUrl={testimonialData.imageUrl}
+/>
+        <button onClick={resetTestimonialData} className="bg-red-600 text-white py-2 px-4 rounded mt-4">
+          Reset Testimonial
+        </button>
+      </section>
 
-      {/* Pulsante per resettare i dati Testimonial */}
-      <button
-        onClick={resetTestimonialData}
-        className="bg-red-600 text-white py-2 px-4 rounded mt-4"
-      >
-        Reset Testimonial
-      </button>
+      {/* FAQ Section */}
+      <section id="faq" className="p-8">
+        <FAQSection />
+      </section>
 
-      <hr className="border-t border-gray-200 my-8" />
+      {/* Contact Section */}
+      <section id="contact" className="p-8">
+        <ContactForm />
+      </section>
 
-      <ContactForm />
-
+      {/* Call to Action */}
       <CallToAction
         text="Hai già un'idea? Inizia a costruire ora!"
         buttonText="Crea una sezione"
