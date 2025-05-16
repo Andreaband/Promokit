@@ -31,10 +31,10 @@ export default function Testimonial({
     <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-white">
       {isEditing ? (
         <div>
-          <h2 className="text-xl font-semibold mb-4">Modifica Testimonianza</h2>
+          <h2 className="text-xl font-semibold mb-4">Edit</h2>
           <div className="space-y-4">
             <div>
-              <label className="block">Nome</label>
+              <label className="block">Name</label>
               <input
                 type="text"
                 value={name}
@@ -44,7 +44,7 @@ export default function Testimonial({
               />
             </div>
             <div>
-              <label className="block">Ruolo</label>
+              <label className="block">Role</label>
               <input
                 type="text"
                 value={role}
@@ -54,7 +54,7 @@ export default function Testimonial({
               />
             </div>
             <div>
-              <label className="block">Citazione</label>
+              <label className="block">Comment</label>
               <textarea
                 value={quote}
                 onChange={(e) => setQuote(e.target.value)}
@@ -63,7 +63,7 @@ export default function Testimonial({
               />
             </div>
             <div>
-              <label className="block">Immagine URL</label>
+              <label className="block">Image URL</label>
               <input
                 type="text"
                 value={imageUrl}
@@ -76,7 +76,7 @@ export default function Testimonial({
               onClick={handleSave}
               className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
             >
-              Salva Testimonianza
+              Save
             </button>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function Testimonial({
             onClick={() => setIsEditing(true)}
             className="bg-blue-600 text-white py-2 px-4 rounded"
           >
-            Modifica Testimonianza
+            Edit Testimonial
           </button>
         </div>
       )}

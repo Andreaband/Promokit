@@ -10,7 +10,7 @@ export default function Sidebar() {
     { id: "hero", label: "Hero" },
     { id: "features", label: "Features" },
     { id: "faq", label: "FAQ" },
-    { id: "contact", label: "Contatti" },
+    { id: "contact", label: "Contact" },
   ];
 
   const scrollToSection = (id: string) => {

@@ -7,36 +7,37 @@ import Testimonial from "@/components/sections/Testimonial";
 import FeatureCard from "@/components/sections/FeatureCard";
 import ContactForm from "@/components/sections/ContactForm";
 import FAQSection from "@/components/sections/FAQSection";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sections/Sidebar";
 
 export default function Home() {
   const initialHeroData = {
-    title: "Crea la tua landing pubblicitaria",
-    subtitle: "Usa PromoKit per progettare e testare campagne visuali in pochi minuti.",
-    imageUrl: "https://source.unsplash.com/featured/?marketing",
-  };
+  title: "Create your promotional landing page",
+  subtitle: "Use PromoKit to design and test visual campaigns in minutes.",
+  imageUrl: "https://source.unsplash.com/featured/?marketing",
+};
+
 
   const initialTestimonialData = {
     name: "Jane Doe",
     role: "Marketing Specialist",
-    quote: "PromoKit ha cambiato il nostro approccio alla pubblicità online, rendendolo più veloce ed efficiente.",
+    quote: "PromoKit has revolutionized our online advertising, making it faster and more efficient.",
     imageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
   };
 
   const initialFeatures = [
     {
-      title: "Facile da usare",
-      description: "Strumenti intuitivi per progettare landing page in pochi click.",
+      title:  "Easy to use",
+      description:  "Intuitive tools to design landing pages in just a few clicks.",
       icon: "https://img.icons8.com/ios/452/brush.png",
     },
     {
-      title: "Design personalizzabile",
-      description: "Crea design unici adattabili a qualsiasi tipo di campagna.",
+      title: "Customizable design",
+      description: "Create unique designs adaptable to any campaign type.",
       icon: "https://img.icons8.com/ios/452/edit.png",
     },
     {
-      title: "Test A/B",
-      description: "Analizza facilmente la efficacia delle tue campagne con test A/B.",
+      title: "A/B Testing",
+      description: "Easily analyze the effectiveness of your campaigns with A/B tests.",
       icon: "https://img.icons8.com/ios/452/poll.png",
     },
   ];
@@ -123,7 +124,7 @@ export default function Home() {
 
       {/* Hero Editor */}
       <div className="p-8">
-        <h2 className="text-xl font-semibold mb-4">Modifica Hero</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit Hero</h2>
         {["title", "subtitle", "imageUrl"].map((field) => (
           <div key={field} className="mb-4">
             <label className="block text-sm capitalize">{field}</label>
@@ -137,13 +138,13 @@ export default function Home() {
           </div>
         ))}
         <button onClick={handleReset} className="bg-red-600 text-white py-2 px-4 rounded mt-4">
-          Resetta tutto
+          Reset
         </button>
       </div>
 
       {/* Features Editor */}
       <section id="features" className="p-8">
-        <h2 className="text-xl font-semibold mb-4">Modifica Features</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit Features</h2>
         {features.map((feature, index) => (
           <div key={index} className="mb-6 border p-4 rounded">
             {(["title", "description", "icon"] as const).map((field) => (
@@ -197,10 +198,11 @@ export default function Home() {
 
       {/* Call to Action */}
       <CallToAction
-        text="Hai già un'idea? Inizia a costruire ora!"
-        buttonText="Crea una sezione"
-        onClick={() => alert("Work in progress 😎")}
-      />
+  text="Have an idea? Start building now!"
+  buttonText="Create a section"
+  onClick={() => alert("Work in progress 😎")}
+/>
+
     </main>
   );
 }
